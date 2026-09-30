@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CardMaker｜線上卡片製作</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, "Microsoft JhengHei", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #fff5fa;
+            color: #333;
+        }
+
+        /* 左側工作列 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 230px;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #f0dce6;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+            color: #e86b9b;
+            padding: 10px 15px 30px;
+        }
+
+        .menu-title {
+            font-size: 12px;
+            color: #999;
+            margin: 15px;
+        }
+
+        .menu-item {
+            display: block;
+            padding: 13px 15px;
+            margin: 5px 0;
+            border-radius: 12px;
+            color: #555;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .menu-item:hover {
+            background: #fff0f6;
+            color: #e05288;
+        }
+
+        .menu-item.active {
+            background: #ffe1ed;
+            color: #d94f82;
+            font-weight: bold;
+        }
+
+        /* 主內容 */
+        .main {
+            margin-left: 230px;
+            min-height: 100vh;
+            padding: 45px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 45px;
+        }
+
+        .topbar h1 {
+            font-size: 28px;
+        }
+
+        .login {
+            padding: 10px 20px;
+            border: 1px solid #e86b9b;
+            border-radius: 20px;
+            color: #d94f82;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* 歡迎區 */
+        .hero {
+            background: linear-gradient(135deg, #ffd9e8, #fff0f7);
+            border-radius: 30px;
+            padding: 55px;
+            text-align: center;
+            margin-bottom: 45px;
+            box-shadow: 0 15px 40px rgba(210, 100, 140, 0.12);
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 18px;
+            color: #c74777;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .start-btn {
+            border: none;
+            background: #e85f91;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-size: 17px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(220, 80, 130, 0.3);
+        }
+
+        /* 樣式 */
+        .section-title {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .styles {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .style-card {
+            height: 160px;
+            border-radius: 20px;
+            padding: 25px;
+            cursor: pointer;
+            transition: 0.25s;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .style-card:hover {
+            transform: translateY(-7px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
+        }
+
+        .style-card h3 {
+            font-size: 20px;
+        }
+
+        .pink {
+            background: linear-gradient(135deg, #ffc1d9, #fff0f6);
+        }
+
+        .glass {
+            background: linear-gradient(135deg, #d9f5ff, #ffffff);
+            backdrop-filter: blur(10px);
+        }
+
+        .paper {
+            background: #f5ead8;
+        }
+
+        .mosaic {
+            background:
+                linear-gradient(45deg, #ff9fc4 25%, transparent 25%),
+                linear-gradient(-45deg, #ffd1e2 25%, transparent 25%),
+                linear-gradient(45deg, transparent 75%, #ff9fc4 75%),
+                linear-gradient(-45deg, transparent 75%, #ffd1e2 75%);
+            background-size: 35px 35px;
+            background-position: 0 0, 0 17px, 17px -17px, -17px 0;
+        }
+
+        /* RWD */
+        @media (max-width: 900px) {
+            .styles {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .sidebar {
+                width: 180px;
+            }
+
+            .main {
+                margin-left: 180px;
+                padding: 25px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .styles {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- 左側工作列 -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            ✦ CardMaker
+        </div>
+
+        <div class="menu-title">
+            工作區
+        </div>
+
+        <a class="menu-item active" onclick="showMessage('首頁')">
+            🏠 首頁
+        </a>
+
+        <a class="menu-item" onclick="showMessage('我的卡片')">
+            💌 我的卡片
+        </a>
+
+        <a class="menu-item" onclick="showMessage('卡片樣式')">
+            🎨 卡片樣式
+        </a>
+
+        <a class="menu-item" onclick="showMessage('素材')">
+            ✨ 素材
+        </a>
+
+        <a class="menu-item" onclick="showMessage('設定')">
+            ⚙️ 設定
+        </a>
+
+    </aside>
+
+
+    <!-- 主畫面 -->
+    <main class="main">
+
+        <div class="topbar">
+            <h1>首頁</h1>
+
+            <button class="login" onclick="showMessage('登入功能之後會加入')">
+                登入 / 註冊
+            </button>
+        </div>
+
+
+        <!-- 歡迎區 -->
+        <section class="hero">
+
+            <h2>做一張屬於你的卡片 ✨</h2>
+
+            <p>
+                選擇你喜歡的風格，開始製作專屬於自己的電子卡片。
+            </p>
+
+            <button class="start-btn" onclick="startMaking()">
+                ＋ 開始製作卡片
+            </button>
+
+        </section>
+
+
+        <!-- 卡片樣式 -->
+        <section>
+
+            <h2 class="section-title">
+                選擇卡片風格
+            </h2>
+
+            <div class="styles">
+
+                <div class="style-card pink"
+                     onclick="chooseStyle('粉紅')">
+                    <h3>🌸 粉紅</h3>
+                </div>
+
+                <div class="style-card glass"
+                     onclick="chooseStyle('玻璃')">
+                    <h3>💎 玻璃</h3>
+                </div>
+
+                <div class="style-card paper"
+                     onclick="chooseStyle('紙張')">
+                    <h3>📜 紙張</h3>
+                </div>
+
+                <div class="style-card mosaic"
+                     onclick="chooseStyle('馬賽克')">
+                    <h3>🔲 馬賽克</h3>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        function startMaking() {
+            alert("太好了！卡片編輯器之後會從這裡開始。");
+        }
+
+        function chooseStyle(style) {
+            alert("你選擇了「" + style + "」風格！");
+        }
+
+        function showMessage(name) {
+            alert(name + " 功能正在製作中！");
+        }
+
+    </script>
+
+</body>
+</html>
