@@ -1,341 +1,403 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CardMaker｜線上卡片製作</title>
-
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, "Microsoft JhengHei", sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            background: #fff5fa;
-            color: #333;
-        }
-
-        /* 左側工作列 */
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 230px;
-            height: 100vh;
-            background: white;
-            border-right: 1px solid #f0dce6;
-            padding: 25px 15px;
-        }
-
-        .logo {
-            font-size: 25px;
-            font-weight: bold;
-            color: #e86b9b;
-            padding: 10px 15px 30px;
-        }
-
-        .menu-title {
-            font-size: 12px;
-            color: #999;
-            margin: 15px;
-        }
-
-        .menu-item {
-            display: block;
-            padding: 13px 15px;
-            margin: 5px 0;
-            border-radius: 12px;
-            color: #555;
-            text-decoration: none;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-
-        .menu-item:hover {
-            background: #fff0f6;
-            color: #e05288;
-        }
-
-        .menu-item.active {
-            background: #ffe1ed;
-            color: #d94f82;
-            font-weight: bold;
-        }
-
-        /* 主內容 */
-        .main {
-            margin-left: 230px;
-            min-height: 100vh;
-            padding: 45px;
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 45px;
-        }
-
-        .topbar h1 {
-            font-size: 28px;
-        }
-
-        .login {
-            padding: 10px 20px;
-            border: 1px solid #e86b9b;
-            border-radius: 20px;
-            color: #d94f82;
-            background: white;
-            cursor: pointer;
-        }
-
-        /* 歡迎區 */
-        .hero {
-            background: linear-gradient(135deg, #ffd9e8, #fff0f7);
-            border-radius: 30px;
-            padding: 55px;
-            text-align: center;
-            margin-bottom: 45px;
-            box-shadow: 0 15px 40px rgba(210, 100, 140, 0.12);
-        }
-
-        .hero h2 {
-            font-size: 42px;
-            margin-bottom: 18px;
-            color: #c74777;
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 30px;
-        }
-
-        .start-btn {
-            border: none;
-            background: #e85f91;
-            color: white;
-            padding: 15px 35px;
-            border-radius: 30px;
-            font-size: 17px;
-            cursor: pointer;
-            transition: 0.25s;
-        }
-
-        .start-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(220, 80, 130, 0.3);
-        }
-
-        /* 樣式 */
-        .section-title {
-            font-size: 24px;
-            margin-bottom: 20px;
-        }
-
-        .styles {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-        }
-
-        .style-card {
-            height: 160px;
-            border-radius: 20px;
-            padding: 25px;
-            cursor: pointer;
-            transition: 0.25s;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-end;
-            border: 1px solid rgba(0,0,0,0.05);
-        }
-
-        .style-card:hover {
-            transform: translateY(-7px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.1);
-        }
-
-        .style-card h3 {
-            font-size: 20px;
-        }
-
-        .pink {
-            background: linear-gradient(135deg, #ffc1d9, #fff0f6);
-        }
-
-        .glass {
-            background: linear-gradient(135deg, #d9f5ff, #ffffff);
-            backdrop-filter: blur(10px);
-        }
-
-        .paper {
-            background: #f5ead8;
-        }
-
-        .mosaic {
-            background:
-                linear-gradient(45deg, #ff9fc4 25%, transparent 25%),
-                linear-gradient(-45deg, #ffd1e2 25%, transparent 25%),
-                linear-gradient(45deg, transparent 75%, #ff9fc4 75%),
-                linear-gradient(-45deg, transparent 75%, #ffd1e2 75%);
-            background-size: 35px 35px;
-            background-position: 0 0, 0 17px, 17px -17px, -17px 0;
-        }
-
-        /* RWD */
-        @media (max-width: 900px) {
-            .styles {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .sidebar {
-                width: 180px;
-            }
-
-            .main {
-                margin-left: 180px;
-                padding: 25px;
-            }
-        }
-
-        @media (max-width: 600px) {
-            .sidebar {
-                position: static;
-                width: 100%;
-                height: auto;
-            }
-
-            .main {
-                margin-left: 0;
-            }
-
-            .styles {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CardMaker｜線上卡片製作</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fff5fa;color:#333;
+font-family:Arial,"Microsoft JhengHei",sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.sidebar{position:fixed;inset:0 auto 0 0;width:220px;
+background:white;border-right:1px solid #f0dce6;padding:24px 14px}
+.logo{font-size:24px;font-weight:bold;color:#e86b9b;padding:10px 12px 28px}
+.menu-title{font-size:12px;color:#999;margin:14px 12px}
+.menu-item{display:block;padding:13px 12px;margin:5px 0;
+border-radius:12px;color:#555;cursor:pointer}
+.menu-item:hover,.menu-item.active{background:#ffe1ed;color:#d94f82}
+.main{margin-left:220px;padding:32px;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;
+gap:12px;margin-bottom:30px}
+.topbar h1{font-size:26px;margin:0}
+.pill{background:white;color:#d94f82;border:1px solid #e86b9b;
+padding:10px 18px;border-radius:22px}
+.hero{background:linear-gradient(135deg,#ffd9e8,#fff0f7);
+border-radius:28px;padding:48px 25px;text-align:center;margin-bottom:36px}
+.hero h2{font-size:clamp(28px,4vw,42px);color:#c74777;margin:0 0 16px}
+.hero p{color:#666;line-height:1.8}
+.primary{background:#e85f91;color:white;border:0;padding:13px 22px;
+border-radius:24px}
+.primary:hover{background:#d94f82}
+.section-title{font-size:22px;margin:24px 0 16px}
+.styles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.style-card{min-height:145px;border-radius:18px;padding:18px;
+display:flex;align-items:end;border:2px solid transparent;
+cursor:pointer;transition:.2s}
+.style-card:hover{transform:translateY(-4px)}
+.pink{background:linear-gradient(135deg,#ffc1d9,#fff0f6)}
+.glass{background:linear-gradient(135deg,#cceefa,#ffffff);
+border:1px solid #c5e7ef;box-shadow:inset 0 0 18px #fff}
+.paper{background:repeating-linear-gradient(0deg,#f4e7d3,#f4e7d3 3px,#f8efdf 4px,#f8efdf 7px)}
+.mosaic{background-color:#ffd9e8;background-image:
+linear-gradient(45deg,#ff9fc4 25%,transparent 25%),
+linear-gradient(-45deg,#ffd1e2 25%,transparent 25%),
+linear-gradient(45deg,transparent 75%,#ff9fc4 75%),
+linear-gradient(-45deg,transparent 75%,#ffd1e2 75%);
+background-size:32px 32px;background-position:0 0,0 16px,16px -16px,-16px 0}
+.hidden{display:none!important}
+.panel{background:white;border:1px solid #f0dce6;border-radius:20px;padding:22px}
+.editor-layout{display:grid;grid-template-columns:minmax(230px, .85fr) minmax(280px,1.15fr);gap:20px}
+.field{display:block;margin:15px 0 7px;font-weight:bold;font-size:14px}
+input[type="text"],textarea,select{width:100%;padding:11px 12px;
+border:1px solid #e5d5dd;border-radius:10px;background:#fff}
+textarea{resize:vertical;min-height:115px;line-height:1.6}
+input[type="color"]{width:100%;height:42px;border:0;background:white}
+.small-note{font-size:12px;color:#777;line-height:1.7}
+.preview-wrap{background:#fff8fb;border-radius:16px;padding:18px}
+.preview-card{min-height:340px;aspect-ratio:4/3;border-radius:12px;
+padding:25px;display:flex;flex-direction:column;align-items:center;
+justify-content:center;text-align:center;overflow-wrap:anywhere;
+box-shadow:0 8px 25px #d8a4ba33;transition:background .2s}
+.preview-card h2{font-size:clamp(22px,3vw,34px);margin:0 0 18px}
+.preview-card p{white-space:pre-wrap;line-height:1.9;margin:0}
+.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.secondary{background:white;border:1px solid #e5b7cb;color:#b74473;
+padding:11px 16px;border-radius:22px}
+.card-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.saved-card{padding:16px;border:1px solid #f0dce6;border-radius:14px;background:#fff9fc}
+@media(max-width:850px){
+ .sidebar{width:165px}.main{margin-left:165px;padding:20px}
+ .styles{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .editor-layout{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+ .sidebar{position:static;width:auto;height:auto;border-right:0;border-bottom:1px solid #f0dce6}
+ .logo{padding-bottom:12px}.menu-title{display:none}
+ .main{margin-left:0;padding:16px}.hero{padding:30px 18px}
+ .card-list{grid-template-columns:1fr}
+}
+</style>
 </head>
-
 <body>
 
-    <!-- 左側工作列 -->
-    <aside class="sidebar">
+<aside class="sidebar">
+  <div class="logo">✦ CardMaker</div>
+  <div class="menu-title">工作區</div>
+  <div class="menu-item active" data-page="home">🏠 首頁</div>
+  <div class="menu-item" data-page="mine">💌 我的卡片</div>
+  <div class="menu-item" data-page="styles">🎨 卡片樣式</div>
+  <div class="menu-item" data-page="editor">✨ 編輯卡片</div>
+  <div class="menu-item" data-page="settings">⚙️ 設定</div>
+</aside>
 
-        <div class="logo">
-            ✦ CardMaker
+<main class="main">
+  <div class="topbar">
+    <h1 id="pageTitle">首頁</h1>
+    <button class="pill" id="loginButton">登入 / 註冊</button>
+  </div>
+
+  <section id="home">
+    <div class="hero">
+      <h2>做一張屬於你的卡片 ✨</h2>
+      <p>選擇喜歡的材質與顏色，製作專屬的電子卡片。</p>
+      <button class="primary" id="startButton">＋ 開始製作卡片</button>
+    </div>
+    <h2 class="section-title">選擇卡片風格</h2>
+    <div class="styles">
+      <div class="style-card pink" data-style="pink"><h3>🌸 粉紅</h3></div>
+      <div class="style-card glass" data-style="glass"><h3>💎 玻璃</h3></div>
+      <div class="style-card paper" data-style="paper"><h3>📜 紙張</h3></div>
+      <div class="style-card mosaic" data-style="mosaic"><h3>🔲 馬賽克</h3></div>
+    </div>
+  </section>
+
+  <section id="styles" class="hidden">
+    <h2 class="section-title">選擇你的卡片材質</h2>
+    <p>點選一種風格，就能在編輯器裡繼續設計。</p>
+    <div class="styles">
+      <div class="style-card pink" data-style="pink"><h3>🌸 粉紅</h3></div>
+      <div class="style-card glass" data-style="glass"><h3>💎 玻璃</h3></div>
+      <div class="style-card paper" data-style="paper"><h3>📜 紙張</h3></div>
+      <div class="style-card mosaic" data-style="mosaic"><h3>🔲 馬賽克</h3></div>
+    </div>
+  </section>
+
+  <section id="editor" class="hidden">
+    <p>修改左側內容，右側預覽會即時更新。</p>
+    <div class="editor-layout">
+      <div class="panel">
+        <h2>卡片設定</h2>
+        <label class="field" for="cardTitle">卡片標題</label>
+        <input id="cardTitle" type="text" maxlength="80" value="送給最特別的你">
+
+        <label class="field" for="cardMessage">祝福內容</label>
+        <textarea id="cardMessage" maxlength="1000">願你的每一天都充滿快樂與驚喜！
+希望所有美好的事情，都能慢慢來到你身邊。</textarea>
+
+        <label class="field" for="cardStyle">卡片材質</label>
+        <select id="cardStyle">
+          <option value="pink">🌸 粉紅</option>
+          <option value="glass">💎 玻璃</option>
+          <option value="paper">📜 紙張</option>
+          <option value="mosaic">🔲 馬賽克</option>
+        </select>
+
+        <label class="field" for="textColor">文字顏色</label>
+        <input id="textColor" type="color" value="#333333">
+
+        <label class="field" for="fontSize">文字大小</label>
+        <select id="fontSize">
+          <option value="small">小</option>
+          <option value="medium" selected>中</option>
+          <option value="large">大</option>
+        </select>
+
+        <div class="actions">
+          <button class="primary" id="saveButton">儲存卡片</button>
+          <button class="secondary" id="downloadButton">下載卡片圖片</button>
         </div>
+        <p class="small-note">目前儲存功能只保存在這台電腦的這個瀏覽器中，尚未連接雲端帳號。</p>
+      </div>
 
-        <div class="menu-title">
-            工作區
+      <div class="panel">
+        <h2>即時預覽</h2>
+        <div class="preview-wrap">
+          <div id="previewCard" class="preview-card pink">
+            <h2 id="previewTitle">送給最特別的你</h2>
+            <p id="previewMessage"></p>
+          </div>
         </div>
+        <p class="small-note">這是卡片預覽。下載後可以把圖片分享給朋友。</p>
+      </div>
+    </div>
+  </section>
 
-        <a class="menu-item active" onclick="showMessage('首頁')">
-            🏠 首頁
-        </a>
+  <section id="mine" class="hidden">
+    <h2 class="section-title">我的卡片</h2>
+    <p>這裡會列出你在目前瀏覽器儲存的卡片。</p>
+    <div id="savedList" class="card-list"></div>
+    <button class="primary" id="newCardButton">＋ 製作新卡片</button>
+    <p class="small-note">提醒：這一版的卡片不會自動同步到家裡的電腦。</p>
+  </section>
 
-        <a class="menu-item" onclick="showMessage('我的卡片')">
-            💌 我的卡片
-        </a>
+  <section id="settings" class="hidden">
+    <h2 class="section-title">設定</h2>
+    <div class="panel">
+      <p>歡迎使用 CardMaker！</p>
+      <p>目前是體驗版，登入與雲端同步功能尚未開發。</p>
+      <p>你可以先製作卡片、即時預覽、儲存或下載圖片。</p>
+    </div>
+  </section>
+</main>
 
-        <a class="menu-item" onclick="showMessage('卡片樣式')">
-            🎨 卡片樣式
-        </a>
+<script>
+const pages = ["home","styles","editor","mine","settings"];
+const pageNames = {
+  home:"首頁", styles:"卡片樣式", editor:"編輯卡片",
+  mine:"我的卡片", settings:"設定"
+};
+const $ = id => document.getElementById(id);
+let currentPage = "home";
 
-        <a class="menu-item" onclick="showMessage('素材')">
-            ✨ 素材
-        </a>
+function showPage(name) {
+  currentPage = name;
+  pages.forEach(p => $(p).classList.toggle("hidden", p !== name));
+  document.querySelectorAll(".menu-item").forEach(item => {
+    item.classList.toggle("active", item.dataset.page === name);
+  });
+  $("pageTitle").textContent = pageNames[name];
+  if (name === "mine") renderSaved();
+}
 
-        <a class="menu-item" onclick="showMessage('設定')">
-            ⚙️ 設定
-        </a>
+document.querySelectorAll(".menu-item").forEach(item => {
+  item.addEventListener("click", () => showPage(item.dataset.page));
+});
 
-    </aside>
+$("startButton").addEventListener("click", () => showPage("editor"));
+$("newCardButton").addEventListener("click", () => showPage("editor"));
+$("loginButton").addEventListener("click", () => {
+  alert("登入與註冊功能會在後續版本加入，目前可以直接使用編輯器。");
+});
 
+function chooseStyle(style) {
+  $("cardStyle").value = style;
+  updatePreview();
+  showPage("editor");
+}
 
-    <!-- 主畫面 -->
-    <main class="main">
+document.querySelectorAll("[data-style]").forEach(card => {
+  card.addEventListener("click", () => chooseStyle(card.dataset.style));
+});
 
-        <div class="topbar">
-            <h1>首頁</h1>
+function updatePreview() {
+  $("previewTitle").textContent = $("cardTitle").value || " ";
+  $("previewMessage").textContent = $("cardMessage").value;
+  const preview = $("previewCard");
+  preview.className = "preview-card " + $("cardStyle").value;
+  preview.style.color = $("textColor").value;
+  const sizes = {small:"17px",medium:"21px",large:"27px"};
+  $("previewMessage").style.fontSize = sizes[$("fontSize").value];
+  $("previewTitle").style.fontSize =
+    $("fontSize").value === "large" ? "38px" :
+    $("fontSize").value === "small" ? "25px" : "32px";
+}
 
-            <button class="login" onclick="showMessage('登入功能之後會加入')">
-                登入 / 註冊
-            </button>
-        </div>
+["cardTitle","cardMessage","cardStyle","textColor","fontSize"].forEach(id => {
+  $(id).addEventListener("input", updatePreview);
+  $(id).addEventListener("change", updatePreview);
+});
 
+function readSaved() {
+  try { return JSON.parse(localStorage.getItem("cardmakerCards") || "[]"); }
+  catch (e) { return []; }
+}
 
-        <!-- 歡迎區 -->
-        <section class="hero">
+function renderSaved() {
+  const list = $("savedList");
+  const cards = readSaved();
+  list.replaceChildren();
 
-            <h2>做一張屬於你的卡片 ✨</h2>
+  if (!cards.length) {
+    const message = document.createElement("p");
+    message.textContent = "你還沒有儲存卡片。可以先製作一張試試！";
+    list.appendChild(message);
+    return;
+  }
 
-            <p>
-                選擇你喜歡的風格，開始製作專屬於自己的電子卡片。
-            </p>
+  cards.forEach((card, index) => {
+    const box = document.createElement("div");
+    box.className = "saved-card";
+    const title = document.createElement("h3");
+    title.textContent = card.title || "未命名卡片";
+    const description = document.createElement("p");
+    description.textContent = (card.message || "").slice(0, 90);
+    const edit = document.createElement("button");
+    edit.className = "secondary";
+    edit.textContent = "繼續編輯";
+    edit.addEventListener("click", () => {
+      $("cardTitle").value = card.title;
+      $("cardMessage").value = card.message;
+      $("cardStyle").value = card.style;
+      $("textColor").value = card.color;
+      $("fontSize").value = card.size;
+      updatePreview();
+      showPage("editor");
+    });
+    const remove = document.createElement("button");
+    remove.className = "secondary";
+    remove.textContent = "刪除";
+    remove.addEventListener("click", () => {
+      if (!confirm("確定要刪除這張卡片嗎？")) return;
+      const updated = readSaved();
+      updated.splice(index, 1);
+      localStorage.setItem("cardmakerCards", JSON.stringify(updated));
+      renderSaved();
+    });
+    box.append(title, description, edit, remove);
+    list.appendChild(box);
+  });
+}
 
-            <button class="start-btn" onclick="startMaking()">
-                ＋ 開始製作卡片
-            </button>
+$("saveButton").addEventListener("click", () => {
+  const cards = readSaved();
+  cards.unshift({
+    title: $("cardTitle").value,
+    message: $("cardMessage").value,
+    style: $("cardStyle").value,
+    color: $("textColor").value,
+    size: $("fontSize").value,
+    updated: new Date().toISOString()
+  });
+  try {
+    localStorage.setItem("cardmakerCards", JSON.stringify(cards.slice(0, 30)));
+    alert("卡片已儲存在目前這台電腦的瀏覽器！");
+  } catch (e) {
+    alert("儲存失敗，可能是瀏覽器空間不足。");
+  }
+});
 
-        </section>
+function wrapText(ctx, text, maxWidth) {
+  const lines = [];
+  for (const paragraph of text.split("\n")) {
+    let line = "";
+    for (const char of paragraph) {
+      if (line && ctx.measureText(line + char).width > maxWidth) {
+        lines.push(line);
+        line = char;
+      } else {
+        line += char;
+      }
+    }
+    lines.push(line);
+  }
+  return lines;
+}
 
+$("downloadButton").addEventListener("click", () => {
+  const canvas = document.createElement("canvas");
+  canvas.width = 1200;
+  canvas.height = 900;
+  const ctx = canvas.getContext("2d");
+  const style = $("cardStyle").value;
 
-        <!-- 卡片樣式 -->
-        <section>
+  const backgrounds = {
+    pink:["#ffc1d9","#fff0f6"],
+    glass:["#cceefa","#ffffff"],
+    paper:["#f4e7d3","#fbf3e6"],
+    mosaic:["#ffb7d3","#ffe7f0"]
+  };
+  const colors = backgrounds[style];
+  const gradient = ctx.createLinearGradient(0,0,1200,900);
+  gradient.addColorStop(0,colors[0]);
+  gradient.addColorStop(1,colors[1]);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0,0,1200,900);
 
-            <h2 class="section-title">
-                選擇卡片風格
-            </h2>
+  if (style === "mosaic") {
+    for (let y=0;y<900;y+=65) {
+      for (let x=0;x<1200;x+=65) {
+        ctx.fillStyle = (Math.floor(x/65)+Math.floor(y/65))%2
+          ? "#ff9fc4" : "#ffd1e2";
+        ctx.globalAlpha = 0.45;
+        ctx.fillRect(x,y,60,60);
+      }
+    }
+    ctx.globalAlpha = 1;
+  }
 
-            <div class="styles">
+  const fontSizes = {small:32,medium:42,large:54};
+  const size = fontSizes[$("fontSize").value];
+  ctx.fillStyle = $("textColor").value;
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = "bold " + (size+14) + 'px "Microsoft JhengHei", sans-serif';
+  const title = $("cardTitle").value || " ";
+  const titleLines = wrapText(ctx,title,960);
+  let y = 340 - (titleLines.length-1)*35;
+  titleLines.forEach(line => { ctx.fillText(line,600,y); y+=70; });
 
-                <div class="style-card pink"
-                     onclick="chooseStyle('粉紅')">
-                    <h3>🌸 粉紅</h3>
-                </div>
+  ctx.font = size + 'px "Microsoft JhengHei", sans-serif';
+  const messageLines = wrapText(ctx,$("cardMessage").value,900);
+  y += 35;
+  messageLines.slice(0,10).forEach(line => {
+    ctx.fillText(line,600,y);
+    y += size*1.65;
+  });
 
-                <div class="style-card glass"
-                     onclick="chooseStyle('玻璃')">
-                    <h3>💎 玻璃</h3>
-                </div>
+  try {
+    const link = document.createElement("a");
+    link.download = "CardMaker-card.png";
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  } catch (e) {
+    alert("目前無法下載圖片，請嘗試使用其他瀏覽器。");
+  }
+});
 
-                <div class="style-card paper"
-                     onclick="chooseStyle('紙張')">
-                    <h3>📜 紙張</h3>
-                </div>
-
-                <div class="style-card mosaic"
-                     onclick="chooseStyle('馬賽克')">
-                    <h3>🔲 馬賽克</h3>
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <script>
-
-        function startMaking() {
-            alert("太好了！卡片編輯器之後會從這裡開始。");
-        }
-
-        function chooseStyle(style) {
-            alert("你選擇了「" + style + "」風格！");
-        }
-
-        function showMessage(name) {
-            alert(name + " 功能正在製作中！");
-        }
-
-    </script>
-
+updatePreview();
+renderSaved();
+</script>
 </body>
 </html>
